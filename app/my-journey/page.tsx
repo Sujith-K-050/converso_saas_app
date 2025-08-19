@@ -81,7 +81,7 @@ const Profile = async () => {
         </AccordionItem>
         <AccordionItem value="companions">
           <AccordionTrigger className="text-2xl font-bold">
-            My Companions {`${companions.length}`}
+            My Companions - {`${companions.length}`}
           </AccordionTrigger>
           <AccordionContent>
             <CompanionList title="My Companions " companions={companions} />

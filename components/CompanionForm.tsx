@@ -1,9 +1,8 @@
 "use client";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -21,23 +21,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { subjects } from "@/constants";
 import { Textarea } from "@/components/ui/textarea";
-import { createCompanion } from "@/lib/actions/companion.action";
+import { createCompanion } from "@/lib/actions/companion.actions";
 import { redirect } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Companion is required" }),
-  subject: z.string().min(1, { message: "Subject is required" }),
-  topic: z.string().min(1, { message: "topic is required" }),
-  voice: z.string().min(1, { message: "voice is required" }),
-  style: z.string().min(1, { message: "style is required" }),
-  duration: z.number().min(1, { message: "Duration is required" }),
+  name: z.string().min(1, { message: "Companion is required." }),
+  subject: z.string().min(1, { message: "Subject is required." }),
+  topic: z.string().min(1, { message: "Topic is required." }),
+  voice: z.string().min(1, { message: "Voice is required." }),
+  style: z.string().min(1, { message: "Style is required." }),
+  duration: z.coerce.number().min(1, { message: "Duration is required." }),
 });
 
 const CompanionForm = () => {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,21 +44,17 @@ const CompanionForm = () => {
       topic: "",
       voice: "",
       style: "",
-      duration: 15 as number,
+      duration: 15,
     },
   });
 
-  // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    // console.log(values);
-    // // USer cloud to store , navigate , create/build
-
     const companion = await createCompanion(values);
 
     if (companion) {
       redirect(`/companions/${companion.id}`);
     } else {
-      console.log("Failed to create companion");
+      console.log("Failed to create a companion");
       redirect("/");
     }
   };
@@ -76,7 +70,7 @@ const CompanionForm = () => {
               <FormLabel>Companion name</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Enter Companion name"
+                  placeholder="Enter the companion name"
                   {...field}
                   className="input"
                 />
@@ -122,10 +116,10 @@ const CompanionForm = () => {
           name="topic"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>What should the companion help with ?</FormLabel>
+              <FormLabel>What should the companion help with?</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Ex. Derivatives & Integrals "
+                  placeholder="Ex. Derivates & Integrals"
                   {...field}
                   className="input"
                 />
@@ -160,7 +154,6 @@ const CompanionForm = () => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="style"
@@ -192,7 +185,7 @@ const CompanionForm = () => {
           name="duration"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Estimated session duration in minute</FormLabel>
+              <FormLabel>Estimated session duration in minutes</FormLabel>
               <FormControl>
                 <Input
                   type="number"
@@ -212,4 +205,5 @@ const CompanionForm = () => {
     </Form>
   );
 };
+
 export default CompanionForm;
