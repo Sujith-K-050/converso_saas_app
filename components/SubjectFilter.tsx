@@ -16,7 +16,14 @@ const SubjectFilter = () => {
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
-      if (searchQuery) {
+      if (searchQuery === "all subjects") {
+        const newUrl = removeKeysFromUrlQuery({
+          params: searchParams.toString(),
+          keysToRemove: ["subject"],
+        });
+        router.push(newUrl, { scroll: false });
+      }
+      if (searchQuery && searchQuery !== "all subjects") {
         const newUrl = formUrlQuery({
           params: searchParams.toString(),
           key: "subject",
@@ -46,6 +53,7 @@ const SubjectFilter = () => {
         onChange={(e) => setSearchQuery(e.target.value)}
       />
       <datalist id="subjects">
+        <option value="all subjects" />
         {subjects.map((subject) => (
           <option key={subject} value={subject} />
         ))}

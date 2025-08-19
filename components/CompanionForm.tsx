@@ -33,7 +33,7 @@ const formSchema = z.object({
   topic: z.string().min(1, { message: "topic is required" }),
   voice: z.string().min(1, { message: "voice is required" }),
   style: z.string().min(1, { message: "style is required" }),
-  duration: z.coerce.number().min(1, { message: "Duration is required" }),
+  duration: z.number().min(1, { message: "Duration is required" }),
 });
 
 const CompanionForm = () => {
@@ -46,7 +46,7 @@ const CompanionForm = () => {
       topic: "",
       voice: "",
       style: "",
-      duration: 15,
+      duration: 15 as number,
     },
   });
 
